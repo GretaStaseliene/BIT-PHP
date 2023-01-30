@@ -105,7 +105,8 @@ unset($data[1]);
                         'php' => 'filetype-php',
                         'zip' => 'file-earmark-zip',
                         'sql' => 'filetype-sql',
-                        'psd' => 'filetype-psd'
+                        'psd' => 'filetype-psd',
+                        'html' => 'filetype-html'
                     ];
 
                     if(!is_dir($path)) {

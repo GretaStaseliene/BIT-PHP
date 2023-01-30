@@ -1,9 +1,21 @@
 <?php
 
 $dir = './';
+$back_link = '';
 
-if(isset($_GET['dir'])) {
+if(isset($_GET['dir']) AND $_GET['dir'] != '') {
     $dir = $_GET['dir'];
+
+    $path_array = explode('/', $dir);
+
+    if($dir != './') {
+        if(count($path_array) > 1) {
+            unset($path_array[count($path_array) -1]);
+            $back_link = implode('/', $path_array);
+        } else {
+            $back_link = './';
+        }
+    }  
 }
 
 // Failo sukurimas
@@ -15,12 +27,17 @@ if(isset($_POST['file_name']) AND $_POST['file_name'] != '') {
 // Folderio sukurimas
 if(isset($_POST['folder_name'])) {
     if(!is_dir($_POST['folder_name'])) {
-        mkdir($_POST['folder_name']);
+        mkdir($dir . '/' . $_POST['folder_name']);
+        header('Location: ' . $_SERVER['REQUEST_URI']);
     }
 }
 
 $data = scandir($dir);
 
+unset($data[0]);
+// print_r($data);
+unset($data[1]);
+// print_r($data);
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +55,11 @@ $data = scandir($dir);
     <div class="container">
         <h1 class="mt-3 mb-3 text-uppercase">File Manager</h1>
         <table class="table">
+            <?php if($back_link) { ?>
+                <button class="btn btn-primary">
+                    <a href="?dir=<?= $back_link ?>" class="text-white">Back</a>
+                </button>
+            <?php } ?>
             <thead>
                 <tr>
                     <th>
@@ -52,18 +74,58 @@ $data = scandir($dir);
             </thead>
             <tbody>
                <?php
-                    foreach($data as $folder) { ?>
+                    foreach($data as $item) { 
+
+                        if($dir === './') {
+                            $path = $item;
+                        } else {
+                            $path = $dir . '/' . $item;
+                        }
+
+                        $icon = 'folder';
+
+                        $extensions = [
+                            'pdf' => 'file-earmark-pdf',
+                            'txt' => 'filetype-txt',
+                            'exe' => 'filetype-exe',
+                            'css' => 'filetype-css',
+                            'js' => 'filetype-js',
+                            'json' => 'filetype-json',
+                            'jpg' => 'filetype-jpg',
+                            'png' => 'filetype-png',
+                            'gif' => 'filetype-gif',
+                            'php' => 'filetype-php',
+                            'zip' => 'file-earmark-zip',
+                            'sql' => 'filetype-sql',
+                            'psd' => 'filetype-psd',
+                            'html' => 'filetype-html'
+                        ];
+
+                        if(!is_dir($path)) {
+                            $icon = 'file-earmark';
+
+                            $file_name = explode('.', $item);
+                            $file_name = $file_name[count($file_name) -1];
+                            
+                            if(array_key_exists($file_name, $extensions)) {
+                                $icon = $extensions[$file_name];
+                            }
+                        }
+                ?>
                         <tr>
                             <td>
                                 <input type="checkbox" disabled>
                             </td>
-                            <td><?= (is_dir($folder)) ? '<a href="?dir=' . $folder . '">' . $folder . '</a>' : $folder ?> </td>
+                            <td>
+                                <i class="bi bi-<?= $icon ?>"></i>
+                                <?= (is_dir($path)) ? '<a href="?dir=' . $path . '">' . $item . '</a>' : $item ?>
+                            </td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td>
-                                <button class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button>
-                                <button class="btn btn-primary"><i class="bi bi-vector-pen"></i></button>
+                                <button class="btn btn-danger delete_btn"><i class="bi bi-trash3-fill"></i></button>
+                                <button class="btn btn-primary rename_btn"><i class="bi bi-vector-pen"></i></button>
                             </td>
                         </tr>
                <?php } ?>
