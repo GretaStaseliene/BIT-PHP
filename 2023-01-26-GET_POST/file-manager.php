@@ -1,5 +1,10 @@
 <?php
 
+// __FILE__ konstanta PHP programavimo kalboje grazina absoliutu kelia iki failo kuriame ji issaukiame
+// __DIR__ konstanta daro ta pati, taciau joje nera patalpintas failo pavadinimas
+// $_FILES  superglobaliame kintamajame talpinama persiunciamu failu informacija
+
+
 // $request_uri = explode('/', $_SERVER['REQUEST_URI']);
 
 // //Paskutine reiksme
@@ -16,6 +21,7 @@
 $dir = './';
 $back_link = '';
 
+// Back linko sukurimas
 if(isset($_GET['dir']) AND $_GET['dir'] != '') {
     $dir = $_GET['dir'];
 
@@ -32,6 +38,7 @@ if(isset($_GET['dir']) AND $_GET['dir'] != '') {
     
 }
 
+// Naujo failo arba folderio pridejimas
 if(isset($_POST['data_type']) AND $_POST['data_type'] === 'folder') {
     if(isset($_POST['folder_name']) AND $_POST['folder_name'] != '') {
         mkdir($dir . '/' . $_POST['folder_name']);
@@ -44,7 +51,38 @@ if(isset($_POST['data_type']) AND $_POST['data_type'] === 'folder') {
     }
 }
 
+// failo pavadinimo redagavimas
+if(isset($_POST['new_file_name']) AND $_POST['new_file_name'] != '') {
+    $file_path = explode('/', $_GET['edit']);
+    unset($file_path[count($file_path) -1]);
+    $file_path[] = $_POST['new_file_name'];
 
+    $to = implode('/', $file_path);
+    rename($_GET['edit'], $to);
+    header('Location: ?dir=' . $dir);
+}
+
+// echo basename(__FILE__);
+
+// Istrynimas
+if(isset($_GET['delete']) AND $_GET['delete'] != '') {
+    if($_GET['delete'] === basename(__FILE__)) {
+        header('Location: ?dir=' . $dir . '&m=Cannot delete main file');
+    } else {
+        unlink($_GET['delete']);
+        header('Location: ?dir=' . $dir);
+    }
+}
+
+// Failo uploadinimas
+if(isset($_FILES['file_upload']) AND count($_FILES['file_upload']) > 0) {
+    $tmpFile = $_FILES['file_upload']['tmp_name'];
+    $target = $dir === './' ? $_FILES['file_upload']['name'] : $dir . '/' . $_FILES['file_upload']['name'];
+
+    move_uploaded_file($tmpFile, $target);
+    header('Location: ' . $_SERVER['REQUEST_URI']);
+
+}
 // nuskenuoja esama direktorija
 $data = scandir($dir);
 
@@ -66,10 +104,16 @@ unset($data[1]);
 <body>
     <div class="container">
         <h1>File manager</h1>
+        <!-- <?php if(isset($_GET['m']) AND $_GET['m'] != '') { ?>
+            <div class="alert alert-danger mt-3">
+                <?= $_GET['m'] ?>
+            </div>
+        <?php } ?> -->
         <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,14 +126,16 @@ unset($data[1]);
                         </tr>                   
                 <?php } ?>
                 <?php foreach($data as $item) {
-                    // $path = $dir === './' ? $folder : $dir . '/' . $folder;
 
-                    $path = $dir . './' . $item;
+                    // $path = $dir === './' ? $folder : $dir . '/' . $folder;
 
                     if($dir === './') {
                         $path = $item;
+                    } else {
+                        $path = $dir . './' . $item;
                     }
 
+                    // Ikonu priskyrimas
                     $icon = 'folder';
 
                     $file_formats = [
@@ -106,7 +152,8 @@ unset($data[1]);
                         'zip' => 'file-earmark-zip',
                         'sql' => 'filetype-sql',
                         'psd' => 'filetype-psd',
-                        'html' => 'filetype-html'
+                        'html' => 'filetype-html',
+                        'pdf' => 'filetype-pdf'
                     ];
 
                     if(!is_dir($path)) {
@@ -123,21 +170,48 @@ unset($data[1]);
                     <tr>
                         <td>
                             <i class="bi bi-<?= $icon ?>"></i>
-                            <?= (is_dir($path)) ? '<a href="?dir=' . $path . '">' . $item . '</a>' : $item ?>
+                            <?php if(is_dir($path)) {
+                                echo '<a href="?dir=' . $path . '">' . $item . '</a>';
+                            } else {
+                                echo '<a href="' . $path . '"target="_blank">' . $item . '</a>';
+                            } ?>
+                        </td>
+                        <td>
+                            <a href="?edit=<?= $path ?>&dir=<?= $dir ?>" class="btn btn-success">Edit</a>
+                            <a href="?delete=<?= $path ?>&dir=<?= $dir ?>" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 <?php } ?>
             </tbody>
         </table>
     </div>
+
+    <!-- Failo pavadinimo redagavimo forma -->
+    <?php if(isset($_GET['edit'])) { ?>
+        <div class="container">
+            <form method="POST">
+                <h2>Edit File or Folder </h2>
+                    <!-- Jeigu norime gauti duomenis iš laukelio, tačiau šis neturi būti atvaizduojamas puslapyje, galime panaudoti type="hidden" variaciją -->
+                    <!-- <input type="hidden" name="file_name_original" class="form-control" value="<?= $_GET['edit'] ?>"> -->
+                <div class="mb-3">
+                    <label>New File name</label>
+                    <input type="text" name="new_file_name" class="form-control">
+                </div>
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        
+    <?php } else { ?>
     <div class="container">
         <h2>Create new File or Folder</h2>
-        <form method="POST">
+        <!-- enctype="multipart/form-data" atributas igalina failu persiuntima per html forma -->
+        <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label>Select data type</label>
                 <select name="data_type" class="form-control">
                     <option value="folder">Folder</option>
                     <option value="file">File</option>
+                    <option value="upload">Upload</option>
                 </select>
             </div>
             <div class="folder">
@@ -156,23 +230,37 @@ unset($data[1]);
                     <textarea name="file_contents" class="form-control"></textarea>
                 </div>
             </div>
+            <div class="upload">
+                <div class="mb-3">
+                    <label>Folder name</label>
+                    <input type="file" name="file_upload" class="form-control">
+                </div>
+            </div>
             <div class="mb-3">
                 <button class="btn btn-primary">Add</button>
             </div>
         </form>
-    </div>
-
-    <script>
+        <script>
         document.querySelector('.file').style.display = 'none';
+        document.querySelector('.upload').style.display = 'none';
         document.querySelector('[name="data_type"]').addEventListener('change', (e) => {
            if(e.target.value === 'folder') {
                 document.querySelector('.file').style.display = 'none';
+                document.querySelector('.upload').style.display = 'none';
                 document.querySelector('.folder').style.display = 'block'; 
+           } else if(e.target.value === 'upload') {
+                document.querySelector('.file').style.display = 'none';
+                document.querySelector('.folder').style.display = 'none'; 
+                document.querySelector('.upload').style.display = 'block';
            } else {
                 document.querySelector('.file').style.display = 'block';
                 document.querySelector('.folder').style.display = 'none'; 
+                document.querySelector('.upload').style.display = 'none';
            }
         })
     </script>
+    </div>
+    <?php } ?>
+
 </body>
 </html>
