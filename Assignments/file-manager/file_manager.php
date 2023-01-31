@@ -3,6 +3,7 @@
 $dir = './';
 $back_link = '';
 
+// Back linko generavimas
 if(isset($_GET['dir']) AND $_GET['dir'] != '') {
     $dir = $_GET['dir'];
 
@@ -32,6 +33,40 @@ if(isset($_POST['folder_name'])) {
     }
 }
 
+// Redagavimas
+if(isset($_POST['new_data_name']) AND $_POST['new_data_name'] != '') {
+    if($_GET['edit'] === basename(__FILE__)) {
+        header('Location: ?dir=' . $dir . '&mess=Cannot rename main file');
+    } else {
+        $file_path = explode('/', $_GET['edit']);
+        unset($file_path[count($file_path) -1]);
+        $file_path[] = $_POST['new_data_name'];
+    
+        $newDataName = implode('/', $file_path);
+        rename($_GET['edit'], $newDataName);
+        header('Location: ?dir=' . $dir);
+    }
+}
+
+// Elemento Istrynimas
+if(isset($_GET['delete']) AND $_GET['delete'] != '') {
+    if($_GET['delete'] === basename(__FILE__)) {
+        header('Location: ?dir=' . $dir . '&message=Cannot delete main file');
+    } else {
+        unlink($_GET['delete']);
+        header('Location: ?dir=' . $dir);
+    }
+}
+
+// Failo upload'inimas
+if(isset($_FILES['file_upload']) AND count($_FILES['file_upload']) > 0) {
+    $upload_target = $dir === './' ? $_FILES['file_upload']['name'] : $dir . '/' . $_FILES['file_upload']['name'];
+    $tmp_file = $_FILES['file_upload']['tmp_name'];
+
+    move_uploaded_file($tmp_file, $upload_target);
+    header('Location: ' . $_SERVER['REQUEST_URI']);
+}
+
 $data = scandir($dir);
 
 unset($data[0]);
@@ -54,21 +89,28 @@ unset($data[1]);
 <body>
     <div class="container">
         <h1 class="mt-3 mb-3 text-uppercase">File Manager</h1>
+        <?php if(isset($_GET['message']) AND $_GET['message'] != '') { ?>
+            <div class="alert alert-danger">
+                <?= $_GET['message'] ?>
+            </div>
+        <?php } ?>
+        <?php if(isset($_GET['mess']) AND $_GET['mess'] != '') { ?>
+            <div class="alert alert-danger">
+                <?= $_GET['mess'] ?>
+            </div>
+        <?php } ?>
         <table class="table">
-            <?php if($back_link) { ?>
+            <?php if($back_link) : ?>
                 <button class="btn btn-primary">
                     <a href="?dir=<?= $back_link ?>" class="text-white">Back</a>
                 </button>
-            <?php } ?>
+            <?php endif; ?>
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox" disabled>
+                        <input type="checkbox">
                     </th>
                     <th>Name</th>
-                    <th>Size</th>
-                    <th>Modified</th>
-                    <th>Owner</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -82,6 +124,7 @@ unset($data[1]);
                             $path = $dir . '/' . $item;
                         }
 
+                        // Failu ikonu priskyrimas
                         $icon = 'folder';
 
                         $extensions = [
@@ -114,18 +157,20 @@ unset($data[1]);
                 ?>
                         <tr>
                             <td>
-                                <input type="checkbox" disabled>
+                                <input type="checkbox">
                             </td>
                             <td>
                                 <i class="bi bi-<?= $icon ?>"></i>
-                                <?= (is_dir($path)) ? '<a href="?dir=' . $path . '">' . $item . '</a>' : $item ?>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                                <?php if(is_dir($path)) {
+                                        echo '<a href="?dir=' . $path . '">' . $item . '</a>';
+                                    } else {
+                                        echo '<a href="' . $path . '"target="_blank">' . $item . '</a>';
+                                    } 
+                                ?>
+                        </td>
                             <td>
-                                <button class="btn btn-danger delete_btn"><i class="bi bi-trash3-fill"></i></button>
-                                <button class="btn btn-primary rename_btn"><i class="bi bi-vector-pen"></i></button>
+                               <a href="?delete=<?= $path ?>&dir=<?= $dir ?>" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                               <a href="?edit=<?= $path ?>&dir=<?= $dir ?>" class="btn btn-primary"><i class="bi bi-vector-pen"></i></a>
                             </td>
                         </tr>
                <?php } ?>
@@ -133,34 +178,82 @@ unset($data[1]);
         </table>
     </div>
 
-    <div class="container folder-form">
-        <h2 class="mt-5">Create new Folder</h2>
-        <form method="POST">
-            <div class="mb-3">
-                <label>Folder name</label>
-                <input type="text" name="folder_name" class="form-control">
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-primary">Create Folder</button>
-            </div>
-        </form>
-    </div>
+    <?php if(isset($_GET['edit'])) { ?>
+        <!-- Redagavimo forma -->
+        <div class="container">
+            <h2>Rename Data name</h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label>New Data name</label>
+                    <input type="text" name="new_data_name" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary">Rename</button>
+                </div>
+            </form>
+        </div>
 
-    <div class="container file-form">
-        <h2 class="mt-5">Create new File</h2>
-        <form method="POST">
+    <?php } else { ?>
+
+        <!-- Duomenu sukurimo forma -->
+    <div class="container">
+        <h2>Create new File or Folder</h2>
+        <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
-                <label>Folder name</label>
-                <input type="text" name="file_name" class="form-control">
+                <label>Select data type</label>
+                <select name="data_type" class="form-control">
+                    <option value="folder">Folder</option>
+                    <option value="file">File</option>
+                    <option value="upload">Upload</option>
+                </select>
+            </div>
+            <div class="folder">
+                <div class="mb-3">
+                    <label>Folder name</label>
+                    <input type="text" name="folder_name" class="form-control">
+                </div>
+            </div>
+            <div class="file">
+                <div class="mb-3">
+                    <label>File name</label>
+                    <input type="text" name="file_name" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>File content</label>
+                    <textarea name="file_contents" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="upload">
+                <div class="mb-3">
+                    <label>Upload file</label>
+                    <input type="file" name="file_upload" class="form-control">
+                </div>
             </div>
             <div class="mb-3">
-                <label>Folder content</label>
-                <textarea name="file_content" class="form-control"></textarea>
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-primary">Create File</button>
+                <button class="btn btn-primary">Add</button>
             </div>
         </form>
-    </div>
+
+        <script>
+            document.querySelector('.file').style.display = 'none';
+            document.querySelector('.upload').style.display = 'none';
+
+            document.querySelector('[name="data_type"]').addEventListener('change', (e) => {
+                if(e.target.value === 'folder') {
+                    document.querySelector('.folder').style.display = 'block';
+                    document.querySelector('.file').style.display = 'none';
+                    document.querySelector('.upload').style.display = 'none';
+                } else if(e.target.value === 'file') {
+                    document.querySelector('.folder').style.display = 'none';
+                    document.querySelector('.file').style.display = 'block';
+                    document.querySelector('.upload').style.display = 'none';
+                } else {
+                    document.querySelector('.folder').style.display = 'none';
+                    document.querySelector('.file').style.display = 'none';
+                    document.querySelector('.upload').style.display = 'block';
+                }
+            })
+        </script>
+    <?php } ?>
 </body>
 </html>
