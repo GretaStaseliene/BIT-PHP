@@ -1,7 +1,7 @@
 <?php
 
 $navigacija = [
-  'Home' => 'routeris/index.php',
+  'Home' => 'index.php',
   'Blogas' => '?page=blog',
   'Test' => '?page=test'
 ];
