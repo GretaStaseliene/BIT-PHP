@@ -21,23 +21,26 @@
     switch($page) {
         case 'account':
             include('views/account.php');
-        break;
+            break;
         case 'cards':
             include('views/cards.php');
-        break;
+            break;
         case 'loans':
             include('views/loans.php');
-        break;
+            break;
         case 'pension':
             include('views/pension.php');
-        break;
+            break;
         case 'ebank':
             include('views/log-in.php');
-        break;
+            break;
+        case 'admin':
+            include('views/admin.php');
+            break;
         case 'logout':
             session_destroy();
             include('views/log-in.php');
-        break;
+            break;
         default:
             include('views/log-in.php');
     }
