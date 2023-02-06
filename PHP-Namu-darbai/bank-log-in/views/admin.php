@@ -4,6 +4,11 @@ if (!isset($_SESSION['user'])) {
     header('Location: index.php');
 }
 
+if($_SESSION['user']->role === '0') {
+    header('Location: ?page=account');
+    exit;
+}
+
 $data = json_decode(file_get_contents('database.json'));
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
@@ -53,8 +58,9 @@ if ($action === 'delete') {
             <th>ID</th>
             <th>Vardas</th>
             <th>Pavardė</th>
-            <th>Sąskaitos numers</th>
+            <th>Sąskaitos numeris</th>
             <th>Sąskaitos likutis</th>
+            <th>Rolė</th>
             <th>Veiksmai</th>
         </tr>
         <?php
@@ -65,7 +71,8 @@ if ($action === 'delete') {
                 <td><?= $user->name ?></td>
                 <td><?= $user->last_name ?></td>
                 <td><?= $user->iban ?></td>
-                <td><?= $user->ammount ?> €</td>
+                <td><?= $user->ammount ? $user->ammount . ' €' : '' ?> </td>
+                <td><?= $user->role === '0' ? 'Klientas' : 'Administratorius' ?></td>
                 <td>
                     <a href="?page=admin&action=delete&id=<?= $index ?>" class="btn btn-danger">Trinti</a>
                     <a href="?page=admin&action=edit&id=<?= $index ?>" class="btn btn-primary">Redaguoti</a>
@@ -102,6 +109,13 @@ if ($action === 'delete') {
             <div class="mb-3">
                 <label>Slaptažodis</label>
                 <input type="text" name="password" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Vartotojo rolė</label>
+                <select name="role" class="form-control">
+                    <option value="0">Klientas</option>
+                    <option value="1">Administratorius</option>
+                </select>
             </div>
             <button class="btn btn-primary">Sukurti vartotoją</button>
         </form>

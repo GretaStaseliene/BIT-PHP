@@ -6,17 +6,16 @@ if (
     isset($_POST['password']) AND
     $_POST['password'] !=  ''
 ) {
-
-    if($_POST['login_id'] === 'admin' AND $_POST['password'] === 'admin') {
-        $_SESSION['user'] = 'admin';
-        header('Location: ?page=admin');
-        exit;
-    }
+    // if($_POST['login_id'] === 'admin' AND $_POST['password'] === 'admin') {
+    //     $_SESSION['user'] = 'admin';
+    //     header('Location: ?page=admin');
+    //     exit;
+    // }
 
     $json = file_get_contents('database.json');
-    $decoded = json_decode($json);
+    $users = json_decode($json);
     
-    foreach($decoded as $user) {
+    foreach($users as $user) {
         // print_r($user->id);
         // print_r($user->password);
 
@@ -25,10 +24,14 @@ if (
             $_POST['password'] === $user->password
         ) {
             $_SESSION['user'] = $user;
-            header('Location: ?page=account');
-            exit;
+            if($user->role === '1') {
+                header('Location: ?page=admin');
+                exit;
+            } else {
+                header('Location: ?page=account');
+                exit;
+            }
         }
-
     }
 //    $_SESSION['id'] = '65451351';
 //    header('Location: ?page=account');
