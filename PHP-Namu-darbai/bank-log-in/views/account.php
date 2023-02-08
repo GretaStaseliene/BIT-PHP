@@ -32,10 +32,24 @@ if (!empty($_POST) and $action === 'transfer') {
     foreach ($data as $key => $user) {
         if ($_POST['receiver'] === $user->id) {
             $data[$key]->ammount += $_POST['sum'];
+            $data[$key]->payment_history[] = [
+                'date' => date("Y-m-d H:i:s"),
+                'from' => $useris->name . ' ' . $useris->last_name,
+                'to' => $user->name . ' ' . $user->last_name,
+                'received' => true,
+                'ammount' => $_POST['sum']
+            ];
         }
 
         if ($id === $user->id) {
             $data[$key]->ammount -= $_POST['sum'] + $transferPrice;
+            $data[$key]->payment_history[] = [
+                'date' => date("Y-m-d H:i:s"),
+                'from' => $useris->name . ' ' . $useris->last_name,
+                'to' => $_POST['receiver']->name . ' ' . $_POST['receiver']->last_name,
+                'received' => false,
+                'ammount' => $_POST['sum']
+            ];  
         }
     }
 
@@ -60,6 +74,11 @@ $receivers = array_filter($data, function ($user) {
         return $user;
 });
 
+// $user_data = array_filter($data, function($user) {
+//     if($user->id === $_SESSION['user']->id)
+//         return $user;
+// });
+
 ?>
 
 <div class="container account">
@@ -78,10 +97,9 @@ $receivers = array_filter($data, function ($user) {
             <p><?= $useris->iban; ?></p>
             <h5>Sąskaitos likutis</h5>
             <p class="card-text"><?= $useris->ammount; ?> €</p>
-            <div>
-                <a href="?page=account&action=transfer" class="btn btn-success mb-3">Naujas pavedimas</a>
-            </div>
-            <div>
+            <div class="buttons float-start">
+                <a href="?page=account&action=transfer" class="btn btn-success">Naujas pavedimas</a>
+                <a href="?page=account&action=payment_history" class="btn btn-success">Pavedimų istorija</a>
                 <a href="?page=logout" class="btn btn-danger">Atsijungti</a>
             </div>
         </div>
@@ -104,6 +122,31 @@ $receivers = array_filter($data, function ($user) {
             </div>
             <button class="btn btn-success">Siųsti</button>
         </form>
+
+    <?php endif; ?>
+
+    <?php if($action === 'payment_history') : ?>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Siuntėjas</th>
+                    <th>Gavėjas</th>
+                    <th>Suma</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($useris->payment_history as $data) : ?>
+                    <tr>
+                        <td><?= $data->date ?></td>
+                        <td><?= $data->from ?></td>
+                        <td><?= $data->to ?></td>
+                        <td><?= $data->ammount ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
     <?php endif; ?>
 </div>

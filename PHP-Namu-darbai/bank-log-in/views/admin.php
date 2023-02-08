@@ -4,7 +4,7 @@ if (!isset($_SESSION['user'])) {
     header('Location: index.php');
 }
 
-if($_SESSION['user']->role === '0') {
+if ($_SESSION['user']->role === '0') {
     header('Location: ?page=account');
     exit;
 }
@@ -15,11 +15,16 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if (!empty($_POST) and $action === 'new_user') {
 
+    if (count($exists) > 0) {
+        header('Location: ?page=admin&message=Toks ID arba sąskaitos numeris jau užimtas&status=danger');
+        exit;
+    }
+
     $data[] = $_POST;
 
     file_put_contents('database.json', json_encode($data), true);
 
-    header('Location: ?page=admin');
+    header('Location: ?page=admin&message=Vartotojas sėkmingai sukurtas&status=success');
     exit;
 }
 
@@ -52,6 +57,11 @@ if ($action === 'delete') {
         <a href="?page=admin&action=new_user" class="btn btn-primary mt-3 mb-3">Pridėti naują vartotoją</a>
     </div>
 </div>
+<?php if (isset($_GET['message'])) : ?>
+    <div class="alert alert-<?= $_GET['status'] ?>">
+        <?= $_GET['message'] ?>
+    </div>
+<?php endif; ?>
 <div class="container">
     <table class="table">
         <tr>

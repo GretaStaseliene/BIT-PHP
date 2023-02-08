@@ -1,1 +1,86 @@
-[{"id":"admin","name":"Banko","last_name":"Administratorius","iban":"","ammount":"","password":"admin","role":"1"},{"id":"9687412","name":"Onute","last_name":"Pakalnute","iban":"LT4599321585221","ammount":"230","password":"1234","role":"0"},{"id":"987456","name":"Petras","last_name":"Petraitis","iban":"LT112387961189","ammount":1099.57,"password":"1234","role":"0"},{"id":"5146987","name":"Jonas","last_name":"Jonaitis","iban":"LT36994215498461","ammount":169.14,"password":"1234","role":"0"}]
+[
+    {
+       "id":"admin",
+       "name":"Banko",
+       "last_name":"Administratorius",
+       "iban":"",
+       "ammount":"",
+       "password":"admin",
+       "role":"1"
+    },
+    {
+       "id":"9687412",
+       "name":"Onute",
+       "last_name":"Pakalnute",
+       "iban":"LT4599321585221",
+       "ammount":255,
+       "password":"1234",
+       "role":"0",
+       "payment_history":[
+          {
+             "date":"2023-02-08 14:34:15",
+             "from":"Petras Petraitis",
+             "to":"Onute Pakalnute",
+             "received":true,
+             "ammount":null
+          },
+          {
+             "date":"2023-02-08 18:06:30",
+             "from":"Petras Petraitis",
+             "to":"Onute Pakalnute",
+             "received":true,
+             "ammount":"5"
+          }
+       ]
+    },
+    {
+       "id":"987456",
+       "name":"Petras",
+       "last_name":"Petraitis",
+       "iban":"LT112387961189",
+       "ammount":1063.2799999999997,
+       "password":"1234",
+       "role":"0",
+       "payment_history":[
+          {
+             "date":"2023-02-08 14:34:15",
+             "from":"Petras Petraitis",
+             "to":"Petras Petraitis",
+             "received":false,
+             "ammount":null
+          },
+          {
+             "date":"2023-02-08 18:00:17",
+             "from":"Petras Petraitis",
+             "to":" ",
+             "received":false,
+             "ammount":"10"
+          },
+          {
+             "date":"2023-02-08 18:06:30",
+             "from":"Petras Petraitis",
+             "to":" ",
+             "received":false,
+             "ammount":"5"
+          }
+       ]
+    },
+    {
+       "id":"5146987",
+       "name":"Jonas",
+       "last_name":"Jonaitis",
+       "iban":"LT36994215498461",
+       "ammount":179.14,
+       "password":"1234",
+       "role":"0",
+       "payment_history":[
+          {
+             "date":"2023-02-08 18:00:17",
+             "from":"Petras Petraitis",
+             "to":"Jonas Jonaitis",
+             "received":true,
+             "ammount":null
+          }
+       ]
+    }
+ ]
