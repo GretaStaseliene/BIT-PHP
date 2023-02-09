@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Network App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assests/style.css">
 </head>
 
 <body>
@@ -18,10 +19,10 @@
         <?php $page = isset($_GET['page']) ? $_GET['page'] : '';
 
         switch ($page) {
-            case 'sign_in':
+            case 'signup':
                 include('actions/signup.php');
                 break;
-            case 'log_in':
+            case 'login':
                 include('actions/login.php');
                 break;
             case 'main':

@@ -1,11 +1,11 @@
 <?php
 
-if(isset($_GET['log_in'])) {
+if(isset($_GET['login'])) {
     header('Location: ?page=login');
     exit;
 }
 
-if(isset($_GET['sign_in'])) {
+if(isset($_GET['signup'])) {
     header('Location: ?page=signup');
     exit;
 }
@@ -20,6 +20,6 @@ if(isset($_GET['sign_in'])) {
     </div>
 </div>
 <div class="text-center">
-    <a href="?page=log_in" class="btn btn-outline-primary me-2">Prisijungti</a>
-    <a href="?page=sign_in" class="btn btn-primary">Registruotis</a>
+    <a href="?page=login" class="btn btn-outline-primary me-2">Prisijungti</a>
+    <a href="?page=signup" class="btn btn-primary">Registruotis</a>
 </div>
