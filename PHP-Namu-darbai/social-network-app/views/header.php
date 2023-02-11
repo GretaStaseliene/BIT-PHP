@@ -6,8 +6,8 @@
       </ul>
 
       <div class="col-md-3 text-end">
-        <a href="?page=log_in" class="btn btn-outline-primary me-2">Prisijungti</a>
-        <a href="?page=sign_in" class="btn btn-primary">Registruotis</a>
+        <a href="?page=login" class="btn btn-outline-primary me-2">Prisijungti</a>
+        <a href="?page=signup" class="btn btn-primary">Registruotis</a>
       </div>
     </header>
   </div>

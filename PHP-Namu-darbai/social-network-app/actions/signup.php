@@ -1,71 +1,74 @@
 <?php
-
-$data = json_decode(file_get_contents('data/users.json'), true);
-// print_r($data);
-
 if (!empty($_POST)) {
+    $data = [];
 
-    $idExists = array_filter($data, function ($user) {
-        if ($user['id'] === $_POST['id']) return true;
+    if (file_exists('database.json'))
+        $data = json_decode(file_get_contents('database.json'), true);
+
+    // if(isset($data[$_POST['id']])) {
+    //     echo 'Toks ID jau užregistruotas';
+    //     exit;
+    // }
+    $emailExists = array_filter($data, function ($user) {
+        if ($user['email'] === $_POST['email']) return true;
 
         return false;
     });
 
     $params = [
         'page' => 'signup',
-        'message' => 'Toks vartotojo ID jau egzistuoja',
+        'message' => 'Toks ID jau egzistuoja',
         'status' => 'danger'
     ];
 
-    if (!empty($idExists)) {
+    if (!empty($emailExists)) {
+        $params['message'] = 'Toks el. pastas jau egzistuoja';
+    }
+
+    if (array_key_exists($_POST['id'], $data) or !empty($emailExists)) {
         header('Location: ?' . http_build_query($params));
         exit;
     }
 
+    $_POST['created_at'] = date('Y-m-d h:i:s');
     $_POST['password'] = md5($_POST['password']);
-    $data[] = $_POST;
 
-    file_put_contents('data/users.json', json_encode($data), true);
+    $data['users'][$_POST['id']] = $_POST;
 
-    $_SESSION['user'] = $_POST;
+    file_put_contents('database.json', json_encode($data));
+
+    $_SESSION['user'] = $data['users'][$_POST['id']];
 
     header('Location: ?page=main');
-    exit;
 }
-
 ?>
 
-<div class="d-flex justify-content-center">
-    <div class="text-center">
-        <div class="float-start">
-            <h2>Džiaugaimės, kad nusprendėte užsiregistruoti svetainėje</h2>
-            <p>Teisingai užpildykite visus duomenis</p>
-        </div>
+
+<form method="POST" class="signup">
+    <h1>Registracija</h1>
+
+    <?php include('views/alerts.php'); ?>
+
+    <div class="mb-3">
+        <label>El. pastas</label>
+        <input type="email" name="email" placeholder="test@gmail.com" class="form-control" required />
     </div>
-</div>
+    <div class="mb-3">
+        <label>Slaptazodis</label>
+        <input type="password" name="password" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Vardas</label>
+        <input type="text" name="first_name" placeholder="John" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Pavarde</label>
+        <input type="text" name="last_name" placeholder="Smith" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>ID</label>
+        <input type="text" name="id" placeholder="@" class="form-control" required />
+    </div>
 
-<div class="container signup">
-    <form method="POST" class="mt-5">
-
-        <?php include('views/alerts.php') ?>
-
-        <h2 class="text-center">Naujas vartotojas</h2>
-        <div class="mb-3">
-            <label>ID</label>
-            <input type="text" name="id" class="form-control" placeholder="ID" required />
-        </div>
-        <div class="mb-3">
-            <label>Vardas</label>
-            <input type="text" name="name" class="form-control" placeholder="Vardenis" required />
-        </div>
-        <div class="mb-3">
-            <label>Pavardė</label>
-            <input type="text" name="last_name" class="form-control" placeholder="Pavardenis" required />
-        </div>
-        <div class="mb-3">
-            <label>Slaptažodis</label>
-            <input type="text" name="password" class="form-control" required />
-        </div>
-        <button class="btn btn-primary">Sukurti vartotoją</button>
-    </form>
-</div>
+    <button class="btn btn-primary">Registruotis</button>
+</form>

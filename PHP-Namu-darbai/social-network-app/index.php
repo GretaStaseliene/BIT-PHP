@@ -9,14 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Network App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./assests/style.css">
+    <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
     <div class="container">
-        <?php include('views/header.php') ?>
 
-        <?php $page = isset($_GET['page']) ? $_GET['page'] : '';
+        <?php include('views/header.php');
+
+        $page = isset($_GET['page']) ? $_GET['page'] : '';
 
         switch ($page) {
             case 'signup':
@@ -35,9 +36,10 @@
             default:
                 include('views/front-page.php');
         }
-        ?>
 
-        <?php include('views/footer.php') ?>
+
+        include('views/footer.php') ?>
+
     </div>
 </body>
 

@@ -1,0 +1,14 @@
+.login, .signup, .card {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.alertas {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.sort {
+    max-width: 300px;
+    margin-left: 680px;
+}
