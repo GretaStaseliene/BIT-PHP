@@ -95,6 +95,7 @@ if (!empty($_POST)) {
 
 <div class="sort">
     <form>
+        <input type="hidden" name="page" value="main" />
         <label>Rusiuoti</label>
         <select name="order" class="form-control">
             <!-- ASC - Ascending order (didejanti tvarka) -->
