@@ -1,0 +1,44 @@
+body {
+    box-sizing: border-box;
+    background-color: rgb(214, 214, 231);
+}
+
+.login, .signup {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.cover img {
+    max-width: 100%;
+    width: 1400px;
+    position: relative;
+}
+
+.header {
+    position: absolute;
+    top: 273px;
+    left: 521px;
+    font-size: 50px;
+    color: rgb(237, 225, 225);
+    text-transform: uppercase;
+}
+
+.fheading {
+    position: absolute;
+    top: 331px;
+    left: 624px;
+    color: rgb(237, 225, 225);
+    font-size: 22px;
+}
+
+.sheading {
+    position: absolute;
+    top: 361px;
+    left: 601px;
+    color: rgb(237, 225, 225);
+    font-size: 22px;
+}
+
+.anchor {
+    color: rgb(237, 225, 225);
+}
