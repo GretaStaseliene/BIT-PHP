@@ -1,15 +1,22 @@
 <?php
 
-if(!empty($_POST)) {
+if (!empty($_POST)) {
     $email = $_POST['email'];
     $password = md5($_POST['password']);
+    $nickname = $_POST['nickname'];
+
     $params = [
         'page' => 'register',
         'message' => 'Vartotojas sekmingai sukurtas',
         'status' => 'success'
     ];
 
-    if($db->query("INSERT INTO users (email, password) VALUES ('{$email}', '{$password}')")) {
+    if ($db->query(
+        vsprintf(
+            "INSERT INTO users (email, password, nickname) VALUES ('%s', '%s', '%s')",
+            [$email, $password, $nickname]
+        )
+    )) {
         header('Location: ?' . http_build_query($params));
     }
 }
@@ -17,14 +24,18 @@ if(!empty($_POST)) {
 ?>
 
 <form method="POST" class="signup">
-    <h1>Registracija</h1>
+    <h1>Signup</h1>
 
     <div class="mb-3">
-        <label>El. pastas</label>
+        <label>Email</label>
         <input type="email" name="email" placeholder="test@gmail.com" class="form-control" required />
     </div>
     <div class="mb-3">
-        <label>Slaptazodis</label>
+        <label>Nickname</label>
+        <input type="text" name="nickname" placeholder="@..." class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
         <input type="password" name="password" class="form-control" required />
     </div>
 

@@ -51,6 +51,12 @@ try {
             case 'front-page':
                 include('views/pages/front-page.php');
                 break;
+            case 'playlist':
+                include('views/pages/playlist.php');
+                break;
+            case 'user_playlists':
+                include('views/pages/user_playlists.php');
+                break;
             case 'logout':
                 session_destroy();
                 include('views/pages/front-page.php');

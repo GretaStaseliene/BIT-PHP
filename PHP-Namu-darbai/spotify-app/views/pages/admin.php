@@ -7,9 +7,36 @@ if(empty($_SESSION['user']) OR $_SESSION['user']['role'] === 0) {
 
 if(!empty($_POST)) {
 
-    $query = vsprintf("INSERT INTO songs (name, author, album, year, link) VALUES ('%s', '%s', '%s', '%s', '%s')", $_POST);
+    if(!empty($_FILES['photo']['tmp_name'])) {
+        if(!is_dir('./uploads')) {
+            mkdir('./uploads');
+        }
+
+        $filename = explode('.', $_FILES['photo']['name']);
+        $filename = time() . '.' . $filename[count($filename) - 1];
+
+        $imageTypes = ['image/apng', 'image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'];
+
+        if (!in_array($_FILES['photo']['type'], $imageTypes)) {
+            $params = [
+                'page' => 'admin',
+                'message' => 'Neteisingas failo formatas',
+                'status' => 'danger'
+            ];
+
+            header('Location: ?' . http_build_query($params));
+            exit;
+        }
+
+        move_uploaded_file($_FILES['photo']['tmp_name'], './uploads/' . $filename);
+    }
+
+    $query = vsprintf("INSERT INTO songs (name, author, album, year, link, photo) VALUES ('%s', '%s', '%s', '%s', '%s', '{$filename}' )", $_POST);
 
     $db->query($query);
+
+    header('Location: ?page=admin');
+    exit;
 }
 
 $songs = $db->query("SELECT * FROM songs");
@@ -17,24 +44,28 @@ $songs = $songs->fetch_all(MYSQLI_ASSOC);
 
 ?>
 
-<div><a href="?page=logout" class="btn btn-outline-danger float-end">Logout</a></div>
+<div>
+    <a href="?page=logout" class="btn btn-outline-danger float-end">Logout</a>
+</div>
 
 <table class="table">
     <thead>
         <tr>
-            <td>ID</td>
-            <td>Song Name</td>
-            <td>Author</td>
-            <td>Album</td>
-            <td>Year</td>
-            <td>Link</td>
-            <td>Date added</td>
+            <th>ID</th>
+            <th>Cover</th>
+            <th>Song Name</th>
+            <th>Author</th>
+            <th>Album</th>
+            <th>Year</th>
+            <th>Link</th>
+            <th>Date added</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach($songs as $song) : ?>
             <tr>
                 <td><?= $song['id'] ?></td>
+                <td><img src="./uploads/<?= $song['photo'] ?>" alt="cover"></td>
                 <td><?= $song['name'] ?></td>
                 <td><?= $song['author'] ?></td>
                 <td><?= $song['album'] ?></td>
@@ -66,8 +97,12 @@ $songs = $songs->fetch_all(MYSQLI_ASSOC);
         <input type="text" name="year" class="form-control">
     </div>
     <div class="mb-3">
-        <label>Youtue link:</label>
+        <label>Youtube link:</label>
         <input type="text" name="link" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Song cover:</label>
+        <input type="file" name="photo" class="form-control">
     </div>
     <button class="btn btn-primary">Prideti</button>
 </form>

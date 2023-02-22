@@ -9,6 +9,9 @@ if(!empty($_POST)) {
         'status' => 'danger'
     ];
 
+    // print_r($_POST);
+    // exit;
+
     $user = $db->query("SELECT id, role FROM users WHERE email = '{$email}' AND password = '{$password}' ");
 
     if($user->num_rows === 0) {
@@ -21,7 +24,7 @@ if(!empty($_POST)) {
     $_SESSION['user']['id'] = $user[0];
     $_SESSION['user']['role'] = $user[1];
 
-    if($_SESSION['user']['role'] === '1') {
+    if($user[1] === '1') {
         header('Location: ?page=admin');
         exit;
     } else {
@@ -34,14 +37,14 @@ if(!empty($_POST)) {
 
 <form method="POST" class="login">
     
-    <h1>Prisijungti</h1>
+    <h1>Login</h1>
 
     <div class="mb-3">
-        <label>El. pastas</label>
+        <label>Email</label>
         <input type="email" name="email" placeholder="test@gmail.com" class="form-control" required />
     </div>
     <div class="mb-3">
-        <label>Slaptazodis</label>
+        <label>Password</label>
         <input type="password" name="password" class="form-control" required />
     </div>
 
