@@ -24,7 +24,7 @@ $id = $_GET['playlist_id'];
 $playlist = $db->query("SELECT * FROM playlists WHERE id = {$id}");
 $playlist = $playlist->fetch_assoc();
 
-$result = $db->query("SELECT songs.id, songs.name, songs.author, songs.album, songs.year, songs.link, songs_playlists.id AS sp_id
+$result = $db->query("SELECT songs.id, songs.name, songs.author, songs.album, songs.year, songs.link, songs.photo, songs_playlists.id AS sp_id
                         FROM songs_playlists
                         INNER JOIN songs
                         ON songs_playlists.song_id = songs.id
@@ -51,6 +51,9 @@ $songs = $result->fetch_all(MYSQLI_ASSOC);
         <tbody>
             <?php foreach ($songs as $song) : ?>
                 <tr>
+                    <td>
+                        <img src="./uploads/<?= $song['photo'] ?>" alt="cover" style="width: 50px;">
+                    </td>
                     <td><?= $song['name'] ?></td>
                     <td><?= $song['author'] ?></td>
                     <td><?= $song['album'] ?></td>

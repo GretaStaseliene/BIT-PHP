@@ -29,9 +29,14 @@ if(!empty($_POST)) {
         }
 
         move_uploaded_file($_FILES['photo']['tmp_name'], './uploads/' . $filename);
-    }
 
-    $query = vsprintf("INSERT INTO songs (name, author, album, year, link, photo) VALUES ('%s', '%s', '%s', '%s', '%s', '{$filename}' )", $_POST);
+        $_POST['photo'] = $filename;
+        // header('Location: ?page=admin');
+        // exit;
+    }
+    //print_r($_POST);
+
+    $query = vsprintf("INSERT INTO songs (name, author, album, year, link, photo) VALUES ('%s', '%s', '%s', '%s', '%s', '%s' )", $_POST);
 
     $db->query($query);
 
@@ -65,7 +70,7 @@ $songs = $songs->fetch_all(MYSQLI_ASSOC);
         <?php foreach($songs as $song) : ?>
             <tr>
                 <td><?= $song['id'] ?></td>
-                <td><img src="./uploads/<?= $song['photo'] ?>" alt="cover"></td>
+                <td><img src="./uploads/<?= $song['photo'] ?>" alt="cover" style="width: 50px;"></td>
                 <td><?= $song['name'] ?></td>
                 <td><?= $song['author'] ?></td>
                 <td><?= $song['album'] ?></td>
@@ -79,7 +84,7 @@ $songs = $songs->fetch_all(MYSQLI_ASSOC);
 
 <h1>Admin</h1>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     <div class="mb-3">
         <label>Song Name:</label>
         <input type="text" name="name" class="form-control">
