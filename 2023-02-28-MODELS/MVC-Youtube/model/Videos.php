@@ -18,6 +18,8 @@ class Videos extends Database {
         self::$db->query(
             vsprintf("INSERT INTO $this->table ($keys) VALUES ($placeholder)", $data)
         );
+
+        return $this;
     }
 
     public function getRecords() {
@@ -38,6 +40,10 @@ class Videos extends Database {
 
     public function deleteRecords($id) {
         self::$db->query("DELETE FROM $this->table WHERE id = $id");
+    }
+
+    public function getRecordId() {
+        self::$db->insert_id;
     }
 
 }
