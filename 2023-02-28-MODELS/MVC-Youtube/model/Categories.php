@@ -1,5 +1,5 @@
 <?php
 
-class Categories {
-    
+class Categories extends Database {
+    public $table = 'categories';
 }

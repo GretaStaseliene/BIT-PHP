@@ -1,0 +1,20 @@
+body {
+    box-sizing: border-box;
+}
+
+.container {
+    overflow: hidden;
+}
+
+.categories {
+    float: left;
+}
+
+.videos {
+    flex-wrap: wrap;
+}
+
+.nav-link:hover {
+    background-color: rgb(192, 192, 223);
+}
+
