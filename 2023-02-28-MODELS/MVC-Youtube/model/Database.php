@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 abstract class Database {
     const HOST = 'localhost';
     const USER = 'root';
@@ -14,8 +16,8 @@ abstract class Database {
             return;
 
         try {
-            self::$db = new mysqli(self::HOST, self::USER, self::PASSWORD, self::DB);
-        } catch (Exception $e) {
+            self::$db = new \mysqli(self::HOST, self::USER, self::PASSWORD, self::DB);
+        } catch (\Exception $e) {
             echo 'Nepavyko prisijungti prie duomenu bazes';
             exit;
         }

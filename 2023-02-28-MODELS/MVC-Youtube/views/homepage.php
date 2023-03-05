@@ -14,7 +14,7 @@
     <div class="container mt-3">
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-light categories me-3" style="width: 280px;">
             <a href="./" class="text-decoration-none text-dark">
-                <span class="fs-4 ms-3">Kategorijos</span>
+                <span class="fs-4 ms-3">YouTube</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">

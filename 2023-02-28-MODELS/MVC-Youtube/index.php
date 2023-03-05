@@ -5,16 +5,17 @@
 // View - Šablonai kurie sukompiliuojami pagal perduodamą informaciją
 // Controller - Kontroliuoja prieš tai buvusių dviejų sekcijų veiklą
 
-include ('model/Database.php');
-include('model/Categories.php');
-include('model/Videos.php');
+// include ('model/Database.php');
+// include('model/Categories.php');
+// include('model/Videos.php');
 
-include ('controllers/Homepage.php');
+// include ('controllers/Homepage.php');
 
-// function autoload_classes($class) {
-//     include 'model/' . $class . '.php';
-// }
-// spl_autoload_register('autoload_classes');
+function autoload_classes($class) {
+    if(is_file($class . '.php'))
+        include $class . '.php';
+}
+spl_autoload_register('autoload_classes');
 
 // $categories = new Categories();
 // $videos = new Videos();
@@ -52,8 +53,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : '';
 
 switch($page) {
     case 'category':
-        Homepage::byCategory($_GET['id']);
+        Controllers\Homepage::byCategory($_GET['id']);
         break;
     default:
-        Homepage::index();
+        Controllers\Homepage::index();
 }
+?>

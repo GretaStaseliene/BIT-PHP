@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Videos extends Database {
     public $table = 'videos';
 

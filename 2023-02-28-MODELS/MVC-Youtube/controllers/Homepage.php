@@ -1,5 +1,10 @@
 <?php
 
+namespace Controllers;
+
+use Model\Videos;
+use Model\Categories;
+
 class Homepage {
     public static function index() {
         $videos = new Videos();
