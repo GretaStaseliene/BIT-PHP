@@ -1,0 +1,20 @@
+{
+    "name": "greta/first-composer-app",
+    "description": "Test composer app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Greta\\FirstApp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "GretaStaseliene",
+            "email": "gretatamasauskait3@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "league/climate": "dev-master"
+    }
+}
