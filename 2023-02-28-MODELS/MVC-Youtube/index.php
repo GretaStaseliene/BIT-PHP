@@ -11,8 +11,9 @@
 
 // include ('controllers/Homepage.php');
 
-function autoload_classes($class) {
-    if(is_file($class . '.php'))
+function autoload_classes($class)
+{
+    if (is_file($class . '.php'))
         include $class . '.php';
 }
 spl_autoload_register('autoload_classes');
@@ -48,14 +49,44 @@ spl_autoload_register('autoload_classes');
 
 //Kategoriju susigrazinimas
 // print_r($categories->getRecords());
+// include 'views/header.php';
 
-$page = isset($_GET['page']) ? $_GET['page'] : '';
-
-switch($page) {
-    case 'category':
-        Controllers\Homepage::byCategory($_GET['id']);
-        break;
-    default:
-        Controllers\Homepage::index();
-}
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body>
+    
+    <?php
+
+    include("views/header.php");
+
+    $page = isset($_GET['page']) ? $_GET['page'] : '';
+
+    switch ($page) {
+        case 'category':
+            Controllers\Homepage::byCategory($_GET['id']);
+            break;
+        case 'search':
+            Controllers\Search::search();
+            break;
+        case 'video':
+            Controllers\Video::toSingleVideo($_GET['id']);
+            break;
+        default:
+            Controllers\Homepage::index();
+    }
+    ?>
+</body>
+
+</html>
