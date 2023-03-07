@@ -15,4 +15,16 @@ class Videos extends Database {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    function searchFor($searchingFor) {
+        $result = self::$db->query("SELECT * FROM $this->table WHERE name LIKE '%$searchingFor%'")->fetch_all(MYSQLI_ASSOC);
+
+        return $result;
+    }
+
+    function singleVideo($id) {
+        $result = self::$db->query("SELECT * FROM $this->table WHERE id = $id")->fetch_all(MYSQLI_ASSOC);
+
+        return $result;
+    }
+
 }
