@@ -1,3 +1,7 @@
+<?php 
+    include __DIR__ . '/partials/header.php';
+?>
+
 <div class="container">
     <?php foreach ($results as $video) : ?>
         <div class="video">
@@ -6,3 +10,7 @@
         <div class="fs-4"><?= $video['name'] ?></div>
     <?php endforeach; ?>
 </div>
+
+<?php
+    include __DIR__ . '/partials/footer.php';
+?>

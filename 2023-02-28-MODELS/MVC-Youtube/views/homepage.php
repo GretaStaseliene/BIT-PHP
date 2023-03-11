@@ -1,3 +1,7 @@
+<?php
+    include __DIR__ . '/partials/header.php';
+?>
+
 <div class="container mt-3">
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light categories me-3" style="width: 280px;">
         <a href="./" class="text-decoration-none text-dark">
@@ -27,3 +31,7 @@
         <?php endforeach; ?>
     </div>
 </div>
+
+<?php
+    include __DIR__ . '/partials/footer.php';
+?>
