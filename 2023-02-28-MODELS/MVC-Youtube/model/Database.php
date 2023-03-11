@@ -11,6 +11,8 @@ abstract class Database {
     public static $db = false;
     public $table = false;
 
+    public $records = [];
+
     public function __construct() {
         if(self::$db) 
             return;
@@ -60,5 +62,27 @@ abstract class Database {
 
     public function getRecordId() {
         return self::$db->insert_id;
+    }
+
+    public function getRecordsBy($data, $op = 'AND') {
+        $where = '';
+        $count = 1;
+
+        foreach($data as $key => $value) {
+            $where .= "$key = '$value'";
+
+            if($count < count($data))
+                $where .= " $op ";
+
+                $count++;
+        }
+
+        $this->records = self::$db->query("SELECT * FROM $this->table WHERE $where")->fetch_all(MYSQLI_ASSOC);
+
+        return $this;
+    }
+
+    public function recordExists() {
+        return !empty($this->records);
     }
 }
