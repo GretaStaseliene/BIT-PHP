@@ -35,12 +35,9 @@
                     <a href="?page=login" type="button" class="btn btn-outline-dark me-2">Login</a>
                     <a href="?page=register" type="button" class="btn btn-dark">Sign-up</a>
                 <?php else : ?>
-                    <a href="?page=logout" type="button" class="btn btn-danger">Log-out</a>
+                    <button class="btn btn-outline-dark" id="newVideo">Add new video</button>
+                    <a href="?page=logout" class="btn btn-danger">Log-out</a>
                 <?php endif; ?>
             </div>
-            <div class="col-md-3 text-end">
-                <!-- <a href="?page=login" class="btn btn-outline-dark me-2">Login</a>
-            <a href="?page=register" class="btn btn-dark">Sign-up</a>
-        </div> -->
         </header>
     </div>

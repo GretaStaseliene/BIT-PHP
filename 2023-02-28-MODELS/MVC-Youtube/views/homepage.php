@@ -1,6 +1,26 @@
 <?php
-    include __DIR__ . '/partials/header.php';
+include __DIR__ . '/partials/header.php';
 ?>
+
+<div class="container">
+    <div class=" newVideo">
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Video name:</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Video URL:</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Video Thumbnail URL:</label>
+                <input type="text" class="form-control">
+            </div>
+            <button class="btn btn-outline-dark">Add video</button>
+        </form>
+    </div>
+</div>
 
 <div class="container mt-3">
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light categories me-3" style="width: 280px;">
@@ -32,6 +52,20 @@
     </div>
 </div>
 
+<script>
+    const btn = document.querySelector('#newVideo');
+
+    btn.addEventListener('click', () => {
+        const form = document.querySelector('.newVideo');
+
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+</script>
+
 <?php
-    include __DIR__ . '/partials/footer.php';
+include __DIR__ . '/partials/footer.php';
 ?>
