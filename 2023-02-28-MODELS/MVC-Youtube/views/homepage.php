@@ -10,6 +10,18 @@ include __DIR__ . '/partials/header.php';
                 <input type="text" class="form-control">
             </div>
             <div class="mb-3">
+                <label class="form-label">Choose category:</label>
+                <select name="category" class="form-control">
+                    <?php foreach ($categories as $category) : ?>
+                        <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3" id="newCategoryInput">
+                <label class="form-label">New category</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Video URL:</label>
                 <input type="text" class="form-control">
             </div>
@@ -64,6 +76,7 @@ include __DIR__ . '/partials/header.php';
             form.style.display = 'none';
         }
     });
+
 </script>
 
 <?php
