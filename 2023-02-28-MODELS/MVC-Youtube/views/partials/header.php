@@ -37,6 +37,7 @@
                 <?php else : ?>
                     <button class="btn btn-outline-dark" id="newVideo">Add new video</button>
                     <a href="?page=logout" class="btn btn-danger">Log-out</a>
+                    <span class="p-2 mt-2 bg-success text-white rounded-pill"><?= substr($_SESSION['user_name'], 0, 1); ?></span>
                 <?php endif; ?>
             </div>
         </header>

@@ -14,7 +14,7 @@ include __DIR__ . '/partials/header.php';
         <?php if (isset($_SESSION['user_id'])) : ?>
             <form method="POST">
                 <div class="mb-3">
-                    <span class="p-2 mb-3 bg-success text-white rounded-pill"><?= $_SESSION['user_name'] ?></span>
+                    <span class="p-2 mb-2 bg-success text-white rounded-pill"><?= substr($_SESSION['user_name'], 0, 1); ?></span>
                     <label class="form-label">Leave your comment here</label>
                     <textarea class="form-control mt-2" name="comment" cols="30" rows="5"></textarea>
                     <button class="btn btn-outline-dark mt-3">Comment</button>
