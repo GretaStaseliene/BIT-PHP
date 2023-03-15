@@ -98,6 +98,14 @@ body {
   border-top-right-radius: 0;
 }
 
-.newVideo {
+/* .newVideo {
   display: none;
+}
+
+.newCategory {
+  display: none;
+} */
+
+.firstLetter {
+  text-transform: uppercase;
 }

@@ -2,37 +2,47 @@
 include __DIR__ . '/partials/header.php';
 ?>
 
-<div class="container">
-    <div class=" newVideo">
-        <form method="POST">
-            <div class="mb-3">
-                <label class="form-label">Video name:</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Choose category:</label>
-                <select name="category" class="form-control">
-                    <?php foreach ($categories as $category) : ?>
-                        <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="mb-3" id="newCategoryInput">
-                <label class="form-label">New category</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Video URL:</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Video Thumbnail URL:</label>
-                <input type="text" class="form-control">
-            </div>
-            <button class="btn btn-outline-dark">Add video</button>
-        </form>
+<?php if (isset($_GET['action']) AND $_GET['action'] === 'add') : ?>
+
+    <div class="container">
+
+        <div class="newCategory">
+            <form method="POST" class="mb-3">
+                <div class="mb-3" id="newCategoryInput">
+                    <label class="form-label">New category</label>
+                    <input type="text" class="form-control" placeholder="Type new category if you can't find one in select menu">
+                </div>
+                <button class="btn btn-outline-dark">Add Category</button>
+            </form>
+        </div>
+        <div class=" newVideo">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Video name:</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Choose category:</label>
+                    <select name="category" class="form-control">
+                        <?php foreach ($categories as $category) : ?>
+                            <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Video URL:</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Video Thumbnail URL:</label>
+                    <input type="text" class="form-control">
+                </div>
+                <button class="btn btn-outline-dark">Add video</button>
+            </form>
+        </div>
     </div>
-</div>
+<?php endif; ?>
+
 
 <div class="container mt-3">
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light categories me-3" style="width: 280px;">
@@ -64,20 +74,28 @@ include __DIR__ . '/partials/header.php';
     </div>
 </div>
 
-<script>
+<!-- <script>
     const btn = document.querySelector('#newVideo');
 
     btn.addEventListener('click', () => {
         const form = document.querySelector('.newVideo');
+        const category = document.querySelector('.newCategory');
 
         if (form.style.display === 'none') {
             form.style.display = 'block';
         } else {
             form.style.display = 'none';
         }
-    });
 
-</script>
+        if (category.style.display === 'none') {
+            category.style.display = 'block';
+        } else {
+            category.style.display = 'none';
+        }
+
+
+    });
+</script> -->
 
 <?php
 include __DIR__ . '/partials/footer.php';

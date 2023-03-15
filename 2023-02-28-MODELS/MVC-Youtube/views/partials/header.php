@@ -35,9 +35,9 @@
                     <a href="?page=login" type="button" class="btn btn-outline-dark me-2">Login</a>
                     <a href="?page=register" type="button" class="btn btn-dark">Sign-up</a>
                 <?php else : ?>
-                    <button class="btn btn-outline-dark" id="newVideo">Add new video</button>
+                    <a href="?page=/&action=add" class="btn btn-outline-dark me-2" id="newVideo">Add new video</button>
                     <a href="?page=logout" class="btn btn-danger">Log-out</a>
-                    <span class="p-2 mt-2 bg-success text-white rounded-pill"><?= substr($_SESSION['user_name'], 0, 1); ?></span>
+                    <span class="p-2 mt-2 bg-success text-white rounded-circle firstLetter"><?= substr($_SESSION['user_name'], 0, 1); ?></span>
                 <?php endif; ?>
             </div>
         </header>

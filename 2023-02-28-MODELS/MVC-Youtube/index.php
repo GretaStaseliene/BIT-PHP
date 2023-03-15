@@ -84,8 +84,17 @@ spl_autoload_register('autoload_classes');
             Controllers\Search::search();
             break;
 
+        // case 'video':
+        //     if($_SERVER['REQUEST_METHOD'] === 'GET'){
+        //         Controllers\Video::toSingleVideo($_GET['id']);
+        //     } else if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        //         Controllers\Video::processComments();
+        //     }
+        //     break;
+
         case 'video':
-            Controllers\Video::toSingleVideo($_GET['id']);
+                Controllers\Video::toSingleVideo($_GET['id']);
+                Controllers\Video::processComments();
             break;
 
         default:
