@@ -26,14 +26,14 @@ include __DIR__ . '/partials/header.php';
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label">Your name</label>
-                    <input class="form-control" type="text" name="guest_name">
+                    <input class="form-control" type="text" name="user_name">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Leave your comment here</label>
                     <textarea class="form-control" name="comment" cols="30" rows="5"></textarea>
                     <input type="hidden" name="video_id" value="<?= $id ?>"></input>
                 </div>
-                <button class="btn btn-outline-dark mt-3">Comment</button>
+                <button class="btn btn-outline-dark mt-3" type="submit">Comment</button>
             </form>
         <?php endif; ?>
     </div>

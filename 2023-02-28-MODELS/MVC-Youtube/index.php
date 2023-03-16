@@ -94,7 +94,6 @@ spl_autoload_register('autoload_classes');
 
         case 'video':
                 Controllers\Video::toSingleVideo($_GET['id']);
-                Controllers\Video::processComments();
             break;
 
         default:

@@ -2,7 +2,7 @@
 include __DIR__ . '/partials/header.php';
 ?>
 
-<?php if (isset($_GET['action']) AND $_GET['action'] === 'add') : ?>
+<?php if (isset($_GET['action']) and $_GET['action'] === 'add') : ?>
 
     <div class="container">
 
@@ -10,34 +10,37 @@ include __DIR__ . '/partials/header.php';
             <form method="POST" class="mb-3">
                 <div class="mb-3" id="newCategoryInput">
                     <label class="form-label">New category</label>
-                    <input type="text" class="form-control" placeholder="Type new category if you can't find one in select menu">
+                    <input type="text" class="form-control" placeholder="Type new category if you can't find one in select menu" name="category_name">
                 </div>
-                <button class="btn btn-outline-dark">Add Category</button>
+                <button class="btn btn-outline-dark" type="submit">Add Category</button>
             </form>
         </div>
+
         <div class=" newVideo">
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label">Video name:</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" name="name">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Choose category:</label>
-                    <select name="category" class="form-control">
+                    <select name="category_id" class="form-control">
                         <?php foreach ($categories as $category) : ?>
-                            <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                            <option value="<?= $category['id']; ?>"><?= $category['category_name']; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Video URL:</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" name="video_url">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Video Thumbnail URL:</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" name="thumbnail_url">
                 </div>
-                <button class="btn btn-outline-dark">Add video</button>
+                    <!-- <input type="hidden" name="user_id" value="<?= $_SESSION['id'] ?>"></input> -->
+
+                <button class="btn btn-outline-dark" type="submit">Add video</button>
             </form>
         </div>
     </div>
@@ -54,7 +57,7 @@ include __DIR__ . '/partials/header.php';
             <?php foreach ($categories as $category) : ?>
                 <li class="nav-item">
                     <a href="?page=category&id=<?= $category['id'] ?>" class="nav-link text-dark" aria-current="page">
-                        <?= $category['name'] ?>
+                        <?= $category['category_name'] ?>
                     </a>
                 </li>
             <?php endforeach; ?>
