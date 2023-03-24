@@ -22,4 +22,6 @@ class ProductsController extends Controller
             return response('Sorry, something went wrong.', 500);
         }
     }
+
+    
 }
