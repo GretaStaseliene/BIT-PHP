@@ -31,4 +31,5 @@ Route::group(['prefix' => 'products'], function() {
     Route::get('/', [ProductsController::class, 'index']);
     Route::delete('/{id}', [ProductsController::class, 'delete'])->where('id', '[0-9]+');
     Route::post('/', [ProductsController::class, 'create']);
+    Route::put('/{id}', [ProductsController::class, 'update'])->where('id', '[0-9]+');
 });

@@ -53,13 +53,13 @@ function Products() {
       <table className='table'>
         <thead>
           <tr>
-            <td>#</td>
-            <td>Product</td>
-            <td>SKU</td>
-            <td>Warehouse QTY</td>
-            <td>Price</td>
-            <td>Status</td>
-            <td>Created at</td>
+            <th>#</th>
+            <th>Product</th>
+            <th>SKU</th>
+            <th>Warehouse QTY</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Created at</th>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +74,9 @@ function Products() {
               <td>{(new Date(product.created_at)).toLocaleString('lt-LT')}</td>
               <td>
                 <button className='btn btn-danger' onClick={() => handleDelete(product.id)}>Delete</button>
+              </td>
+              <td>
+                <Link to={'/admin/edit-product/' + product.id} className='btn btn-primary'>Edit</Link>
               </td>
             </tr>
           )}

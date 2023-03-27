@@ -40,4 +40,13 @@ class ProductsController extends Controller
             return response('Product was not created', 500);
         }
     }
+
+    public function update(Request $request, $id) {
+        try {
+            Products::where('id', $id)->update($request->all());
+            return 'Product successfully updated';
+        } catch (Exception $e) {
+            return response('Sorry, product cant be updated', 500);
+        }
+    }
 }
