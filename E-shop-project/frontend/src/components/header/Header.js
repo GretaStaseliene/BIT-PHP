@@ -1,6 +1,15 @@
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-function Header() {
+function Header({ setData }) {
+
+    const handleSearch = (e) => {
+        if(e.target.value == '') return;
+        
+        axios.get('http://localhost:8000/api/products/s/' + e.target.value)
+            .then(resp => setData(resp.data));
+    }
+
     return (
         <header>
             <div className="p-3 mb-3 border-bottom">
@@ -17,7 +26,12 @@ function Header() {
                     </ul>
 
                     <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                        <input type="search" className="form-control" placeholder="Search..." aria-label="Search" />
+                        <input 
+                            type="search" 
+                            className="form-control" 
+                            placeholder="Search..." 
+                            aria-label="Search"
+                            onKeyUp={handleSearch} />
                     </form>
 
                     <div className="dropdown text-end">

@@ -14,6 +14,14 @@ class ProductsController extends Controller
         return $data;
     }
 
+    public function singleProduct($id) {
+        try{
+            return Products::find($id);
+        } catch(Exception $e) {
+            return response('Product was not found', 500);
+        }
+    }
+
     public function delete($id) {
         try{
             Products::find($id)->delete();
@@ -35,7 +43,7 @@ class ProductsController extends Controller
 
             $product->save();
 
-            return 'Product successfully created';
+            return response('Product successfully created');
         } catch(Exception $e) {
             return response('Product was not created', 500);
         }
@@ -43,10 +51,27 @@ class ProductsController extends Controller
 
     public function update(Request $request, $id) {
         try {
-            Products::where('id', $id)->update($request->all());
-            return 'Product successfully updated';
+            $product = Products::find($id);
+
+            $product->name = $request->name;
+            $product->sku = $request->sku;
+            $product->photo = $request->photo;
+            $product->warehouse_qty = $request->warehouse_qty;
+            $product->price = $request->price;
+    
+            $product->save();
+
+            return response('Product successfully updated');
         } catch (Exception $e) {
             return response('Sorry, product cant be updated', 500);
+        }
+    }
+
+    public function search($keyword) {
+        try {
+            return Products::where('name', 'LIKE', '%' . $keyword . '%')->get();
+        } catch(Exception $e) {
+            return response('Sorry, could not find product.', 500);
         }
     }
 }
