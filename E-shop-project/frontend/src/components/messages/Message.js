@@ -1,4 +1,9 @@
-function Message ({ message }) {
+import { useContext } from "react";
+import MainContext from "../../context/MainContext";
+
+function Message () {
+
+    const { message } = useContext(MainContext);
 
     // Klaustuka naudojame, kai nezinome ar tai objektas ar ne. jis nurodo, kad mes tikriname, kad jeigu tai yra objektas, mes bandysime kreiptis i key'u m, jeigu tai ne objektas i key'u nesikreipsim, bet ir negausime klaidos
 

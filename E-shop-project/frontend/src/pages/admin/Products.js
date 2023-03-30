@@ -1,15 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
 import Message from '../../components/messages/Message';
+import MainContext from '../../context/MainContext';
 
 function Products() {
 
-  const [data, setData] = useState([]);
-  const [message, setMessage] = useState();
-  const [refresh, setRefresh] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { data, setData, refresh, setRefresh, setLoading, setMessage } = useContext(MainContext);
 
   useEffect(() => {
     setLoading(true);
@@ -24,23 +22,23 @@ function Products() {
     axios.get('http://localhost:8000/api/products')
       .then(resp => {
         setData(resp.data);
-    })
+      })
       .finally(() => setLoading(false));
   }, [refresh]);
 
   const handleDelete = (id) => {
     setLoading(true);
     axios.delete('http://localhost:8000/api/products/' + id)
-    .then(resp => {
-      setMessage({m: resp.data, s: 'success'});
-      setRefresh(!refresh);
-    })
-    .finally(() => setLoading(false));
+      .then(resp => {
+        setMessage({ m: resp.data, s: 'success' });
+        setRefresh(!refresh);
+      })
+      .finally(() => setLoading(false));
   }
 
   return (
     <>
-      <Loading show={loading}/>
+      <Loading />
 
       <div className='d-flex justify-content-between align-items-center'>
         <h1>Produktų sąrašas</h1>
@@ -48,7 +46,7 @@ function Products() {
       </div>
 
 
-      <Message message={message} />
+      <Message />
 
       <table className='table'>
         <thead>

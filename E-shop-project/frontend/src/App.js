@@ -19,13 +19,18 @@ import EditProduct from './pages/admin/EditProduct';
 function App() {
   const [data, setData] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState();
 
   const contextValues = {
     data,
     setData,
     refresh,
-    setRefresh
+    setRefresh,
+    loading,
+    setLoading,
+    message,
+    setMessage
   };
 
   return (
