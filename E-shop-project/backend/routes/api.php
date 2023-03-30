@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\CategoriesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
-use App\Models\Products;
-use PhpParser\Node\Expr\PostDec;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +32,11 @@ Route::group(['prefix' => 'products'], function() {
     Route::post('/', [ProductsController::class, 'create']);
     Route::put('/{id}', [ProductsController::class, 'update'])->where('id', '[0-9]+');
     Route::delete('/{id}', [ProductsController::class, 'delete'])->where('id', '[0-9]+');
+});
+
+Route::group(['prefix' => 'categories'], function() {
+    Route::get('/', [CategoriesController::class, 'index']);
+    Route::post('/', [CategoriesController::class, 'create']);
+    Route::delete('/{id}', [CategoriesController::class, 'delete'])->where('id', '[0-9]+');
+    Route::put('/{id}', [CategoriesController::class, 'update'])->where('id', '[0-9]+');
 });

@@ -7,9 +7,10 @@ function Products() {
   // const [data, setData] = useState([]);
   // const [refresh, setRefresh] = useState(false);
 
-  const {setData, data, refresh} = useContext(MainContext);
+  const {setData, data, refresh, setLoading} = useContext(MainContext);
 
   useEffect(() => {
+    setLoading(true);
     // Duomenu paemimas naudojant fetch funkcija
     // fetch('http://localhost:8000/api')
     // .then(resp =>resp.json())
@@ -19,13 +20,12 @@ function Products() {
 
     // Duomenu paemimas naudojant axios moduli
     axios.get('http://localhost:8000/api/products')
-      .then(resp => setData(resp.data));
+      .then(resp => setData(resp.data))
+      .finally(() => setLoading(false));
   }, [refresh]);
 
   return (
     <>
-      {/* <Header setData={setData} setRefresh={setRefresh} /> */}
-
       <h1>Naujausi produktai</h1>
       <div className='row'>
         {data.map(product =>

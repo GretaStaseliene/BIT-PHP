@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Message from '../../components/messages/Message';
-import Loading from '../../components/loading/Loading';
+import MainContext from '../../context/MainContext';
 
 function NewProduct() {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState();
+
+  const { setLoading, setMessage } = useContext(MainContext);
+
   const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -18,7 +18,7 @@ function NewProduct() {
         axios.post('http://localhost:8000/api/products', data)
             .then(resp => {
                 setMessage({ m: resp.data, s: 'success' });
-                setTimeout(() => navigate('/admin'), 2000);
+                setTimeout(() => navigate('/admin'), 1000);
             })
             .catch(error => {
                 setMessage({ m: error.response.data, s: 'danger' })
@@ -28,11 +28,7 @@ function NewProduct() {
 
     return (
         <>
-            <Loading show={loading} />
-
             <h1>New Product</h1>
-
-            <Message message={message} />
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">

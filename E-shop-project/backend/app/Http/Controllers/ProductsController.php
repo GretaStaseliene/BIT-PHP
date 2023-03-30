@@ -25,7 +25,7 @@ class ProductsController extends Controller
     public function delete($id) {
         try{
             Products::find($id)->delete();
-            return response('Product deleted');
+            return 'Product deleted';
         } catch(Exception $e) {
             return response('Sorry, something went wrong.', 500);
         }
@@ -43,7 +43,7 @@ class ProductsController extends Controller
 
             $product->save();
 
-            return response('Product successfully created');
+            return 'Product successfully created';
         } catch(Exception $e) {
             return response('Product was not created', 500);
         }
@@ -63,7 +63,7 @@ class ProductsController extends Controller
 
             return response('Product successfully updated');
         } catch (Exception $e) {
-            return response('Sorry, product cant be updated', 500);
+            return response('Product was not updated', 500);
         }
     }
 
