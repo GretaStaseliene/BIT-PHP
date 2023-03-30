@@ -69,7 +69,7 @@ class ProductsController extends Controller
 
     public function search($keyword) {
         try {
-            return Products::where('name', 'LIKE', '%' . $keyword . '%')->get();
+            return Products::where('name', 'LIKE', '%' . $keyword . '%')->orWhere('sku', 'LIKE', $keyword)->get();
         } catch(Exception $e) {
             return response('Sorry, could not find product.', 500);
         }

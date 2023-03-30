@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import axios from 'axios';
-import Header from '../components/header/Header';
+import MainContext from '../context/MainContext';
 
 function Products() {
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+  // const [refresh, setRefresh] = useState(false);
+
+  const {setData, data, refresh} = useContext(MainContext);
 
   useEffect(() => {
     // Duomenu paemimas naudojant fetch funkcija
@@ -17,11 +20,12 @@ function Products() {
     // Duomenu paemimas naudojant axios moduli
     axios.get('http://localhost:8000/api/products')
       .then(resp => setData(resp.data));
-  }, []);
+  }, [refresh]);
 
   return (
     <>
-      <Header setData={setData} />
+      {/* <Header setData={setData} setRefresh={setRefresh} /> */}
+
       <h1>Naujausi produktai</h1>
       <div className='row'>
         {data.map(product =>
