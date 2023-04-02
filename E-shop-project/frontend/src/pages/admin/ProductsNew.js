@@ -1,19 +1,25 @@
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainContext from '../../context/MainContext';
 
 function NewProduct() {
 
-  const { setLoading, setMessage } = useContext(MainContext);
+    const [data, setData] = useState([]);
+    const { setLoading, setMessage } = useContext(MainContext);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/categories')
+            .then(resp => setData(resp.data));
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const data = new FormData(e.target);
-        
+
         setLoading(true);
         axios.post('http://localhost:8000/api/products', data)
             .then(resp => {
@@ -50,6 +56,16 @@ function NewProduct() {
                 <div className="mb-3">
                     <label className="form-label">Price</label>
                     <input type="number" step="0.01" name="price" className="form-control" required />
+                </div>
+                <div className='mb-3'>
+                    {data.map(item =>
+                        <div key={item.id}>
+                            <label for="">
+                                <input type='checkbox' name='categories[]' className='form-check-input me-2' value={item.id} />
+                                {item.name}
+                            </label>
+                        </div>
+                    )}
                 </div>
                 <button className="btn btn-primary">Create</button>
             </form>

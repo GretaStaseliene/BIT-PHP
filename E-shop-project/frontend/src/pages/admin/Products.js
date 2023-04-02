@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import MainContext from '../../context/MainContext';
+import AdminTableButtons from '../../components/adminTableButtons/AdminTableButtons';
 
 function Products() {
 
@@ -37,7 +38,7 @@ function Products() {
   return (
     <>
       <div className='d-flex justify-content-between align-items-center'>
-        <h1>Produktų sąrašas</h1>
+        <h1>Products List</h1>
         <Link to='/admin/new-product' className='btn btn-primary'>New Product</Link>
       </div>
 
@@ -47,27 +48,26 @@ function Products() {
             <th>#</th>
             <th>Product</th>
             <th>SKU</th>
-            <th>Warehouse QTY</th>
+            <th>QTY</th>
             <th>Price</th>
             <th>Status</th>
-            <th>Created at</th>
+            <th>Category</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
-          {data.map(product =>
-            <tr key={product.id}>
-              <td>{product.id}</td>
-              <td>{product.name}</td>
-              <td>{product.sku}</td>
-              <td>{product.warehouse_qty}</td>
-              <td>{product.price} €</td>
-              <td>{product.status ? 'On' : 'Off'}</td>
-              <td>{(new Date(product.created_at)).toLocaleString('lt-LT')}</td>
+          {data.map(item =>
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.sku}</td>
+              <td>{item.warehouse_qty}</td>
+              <td>{item.price} €</td>
+              <td>{item.status ? 'On' : 'Off'}</td>
+              <td>{item.categories.map(cat => cat.name).join(', ')}</td>
+              <td>{(new Date(item.created_at)).toLocaleString('lt-LT')}</td>
               <td>
-                <button className='btn btn-danger' onClick={() => handleDelete(product.id)}>Delete</button>
-              </td>
-              <td>
-                <Link to={'/admin/edit-product/' + product.id} className='btn btn-primary'>Edit</Link>
+                <AdminTableButtons id={item.id} link='product' deleteFn={handleDelete} />
               </td>
             </tr>
           )}

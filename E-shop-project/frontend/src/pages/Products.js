@@ -26,7 +26,7 @@ function Products() {
 
   return (
     <>
-      <h1>Naujausi produktai</h1>
+      <h1>Our Newest Products</h1>
       <div className='row'>
         {data.map(product =>
           <div className="card m-2 justify-content-center" key={product.id}>

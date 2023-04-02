@@ -9,14 +9,14 @@ use Exception;
 class ProductsController extends Controller
 {
     public function index() {
-        $data = Products::all();
+        $data = Products::with('categories')->get();
 
         return $data;
     }
 
     public function singleProduct($id) {
         try{
-            return Products::find($id);
+            return Products::with('categories')->find($id);
         } catch(Exception $e) {
             return response('Product was not found', 500);
         }
@@ -24,7 +24,10 @@ class ProductsController extends Controller
 
     public function delete($id) {
         try{
-            Products::find($id)->delete();
+            $data = Products::find($id);
+            $data->categories()->detach();
+            $data->delete();
+
             return 'Product deleted';
         } catch(Exception $e) {
             return response('Sorry, something went wrong.', 500);
@@ -33,15 +36,17 @@ class ProductsController extends Controller
 
     public function create(Request $request) {
         try {
-            $product = new Products; 
+            $data = new Products; 
                 
-            $product->name = $request->name;
-            $product->sku = $request->sku;
-            $product->photo = $request->photo;
-            $product->warehouse_qty = $request->warehouse_qty;
-            $product->price = $request->price;
+            $data->name = $request->name;
+            $data->sku = $request->sku;
+            $data->photo = $request->photo;
+            $data->warehouse_qty = $request->warehouse_qty;
+            $data->price = $request->price;
 
-            $product->save();
+            $data->save();
+
+            $data->categories()->attach($request->categories);
 
             return 'Product successfully created';
         } catch(Exception $e) {
@@ -51,15 +56,17 @@ class ProductsController extends Controller
 
     public function update(Request $request, $id) {
         try {
-            $product = Products::find($id);
+            $data = Products::find($id);
 
-            $product->name = $request->name;
-            $product->sku = $request->sku;
-            $product->photo = $request->photo;
-            $product->warehouse_qty = $request->warehouse_qty;
-            $product->price = $request->price;
+            $data->name = $request->name;
+            $data->sku = $request->sku;
+            $data->photo = $request->photo;
+            $data->warehouse_qty = $request->warehouse_qty;
+            $data->price = $request->price;
     
-            $product->save();
+            $data->save();
+
+            $data->categories()->sync($request->categories);
 
             return response('Product successfully updated');
         } catch (Exception $e) {
