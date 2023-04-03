@@ -11,8 +11,10 @@ function EditProduct() {
         sku: '',
         photo: '',
         warehouse_qty: '',
-        price: ''
+        price: '',
+        categories: []
     });
+    const [categories, setCategories] = useState([]);
 
     const { setLoading, setMessage } = useContext(MainContext);
 
@@ -23,6 +25,9 @@ function EditProduct() {
         axios.get('http://localhost:8000/api/products/' + id)
             .then(resp => setData(resp.data))
             .finally(() => setLoading(false));
+
+            axios.get('http://localhost:8000/api/categories')
+            .then(resp => setCategories(resp.data));
     }, []);
 
 
@@ -46,7 +51,22 @@ function EditProduct() {
     }
 
     const handleField = (e) => {
+
+        if(e.target.name === 'categories') {
+
+            if(e.target.checked) {
+                data.categories.push(e.target.value);
+            } else {
+                const index = data.categories.indexOf(e.target.value);
+
+                data.splice(index, 1);
+            }
+            
+            return setData({...data});
+        }
+
         setData({ ...data, [e.target.name]: e.target.value });
+
     }
 
     return (
@@ -108,6 +128,19 @@ function EditProduct() {
                         value={data.price}
                         onChange={handleField} required
                     />
+                </div>
+                <div className='mb-3'>
+                    {categories.map(item =>
+                        <div key={item.id}>
+                        <label for="">
+                            <input type='checkbox' name='categories' className='form-check-input me-2' value={item.id}
+                            onChange={handleField}
+                            checked={data.categories.find(el => el.id === item.id)} />
+                            {item.name}
+                            
+                        </label>
+                    </div>
+                    )}
                 </div>
 
                 <button className="btn btn-primary">Edit</button>

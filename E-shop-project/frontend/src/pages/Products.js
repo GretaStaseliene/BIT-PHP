@@ -1,13 +1,13 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import MainContext from '../context/MainContext';
 
 function Products() {
 
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   // const [refresh, setRefresh] = useState(false);
 
-  const {setData, data, refresh, setLoading} = useContext(MainContext);
+  const {refresh, setLoading} = useContext(MainContext);
 
   useEffect(() => {
     setLoading(true);

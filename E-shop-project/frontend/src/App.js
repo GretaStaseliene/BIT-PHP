@@ -18,6 +18,9 @@ import EditProduct from './pages/admin/ProductsEdit';
 import Categories from './pages/admin/Categories';
 import NewCategory from './pages/admin/CategoriesNew';
 import EditCategory from './pages/admin/CategoriesEdit';
+import Orders from './pages/admin/Orders';
+import EditOrder from './pages/admin/OrdersEdit';
+import NewOrder from './pages/admin/OrdersNew';
 
 function App() {
   const [data, setData] = useState([]);
@@ -51,6 +54,9 @@ function App() {
                 <Route path='categories' element={<Categories />} />
                 <Route path='new-category' element={<NewCategory />} />
                 <Route path='edit-category/:id' element={<EditCategory />} />
+                <Route path='orders' element={<Orders />} />
+                <Route path='orders/new-order' element={<NewOrder />} />
+                <Route path='orders/edit-order/:id' element={<EditOrder />} />
               </Route>
             </Routes>
           </Main>

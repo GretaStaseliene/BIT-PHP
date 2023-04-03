@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import MainContext from '../../context/MainContext';
@@ -6,7 +6,9 @@ import AdminTableButtons from '../../components/adminTableButtons/AdminTableButt
 
 function Products() {
 
-  const { data, setData, refresh, setRefresh, setLoading, setMessage } = useContext(MainContext);
+  const [data, setData] = useState([]);
+
+  const { refresh, setRefresh, setLoading, setMessage } = useContext(MainContext);
 
   useEffect(() => {
     setLoading(true);
@@ -37,9 +39,12 @@ function Products() {
 
   return (
     <>
-      <div className='d-flex justify-content-between align-items-center'>
+      <div className='d-flex justify-content-between align-items-center mb-3'>
         <h1>Products List</h1>
-        <Link to='/admin/new-product' className='btn btn-primary'>New Product</Link>
+        <div className='d-flex gap-3 justify-content-end'>
+          <Link to='/admin/new-product' className='btn btn-primary'>New Product</Link>
+          <Link to='/admin/orders' className='btn btn-primary'>Orders</Link>
+        </div>
       </div>
 
       <table className='table'>

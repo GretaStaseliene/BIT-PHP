@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import MainContext from '../../context/MainContext';
@@ -6,7 +6,9 @@ import AdminTableButtons from '../../components/adminTableButtons/AdminTableButt
 
 function Categories() {
 
-    const { data, setData, refresh, setRefresh, setLoading, setMessage } = useContext(MainContext);
+    const [data, setData] = useState([]);
+
+    const { refresh, setRefresh, setLoading, setMessage } = useContext(MainContext);
 
     useEffect(() => {
         setLoading(true);
