@@ -1,28 +1,35 @@
 import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import MainContext from "../../context/MainContext";
-import { Link } from "react-router-dom";
 
 function Orders() {
     const [data, setData] = useState([]);
-    const { setLoading } = useContext(MainContext);
+    const [active, setActive] = useState(false);
+    const { setLoading, setMessage, refresh, setRefresh } = useContext(MainContext);
 
     useEffect(() => {
         setLoading(true);
 
         axios.get('http://localhost:8000/api/orders')
             .then(resp => setData(resp.data))
-            .finally(setLoading(false));
-    }, []);
+            .finally(() => setLoading(false));
+    }, [refresh]);
+
+    const handleChange = (id, is_completed) => {
+
+        setActive(!active);
+
+        axios.put('http://localhost:8000/api/orders/' + id, { is_completed: !is_completed })
+            .then(resp => {
+                setMessage({ m: resp.data, s: 'success '});
+                setRefresh(!refresh);
+            });
+    }
 
     return (
         <>
-            <div className='d-flex justify-content-between align-items-center mb-3'>
-                <h1>Orders</h1>
-                <div className='d-flex gap-3 justify-content-end'>
-                    <Link to='/admin/orders/new-order' className='btn btn-primary'>New Order</Link>
-                </div>
-            </div>
+            <h1>Orders</h1>
+
             <table className='table'>
                 <thead>
                     <tr>
@@ -36,8 +43,8 @@ function Orders() {
                         <th>Shipping</th>
                         <th>Product QTY</th>
                         <th>Product_ID</th>
-                        <th>Status</th>
                         <th>Created</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,14 +56,22 @@ function Orders() {
                             <td>{item.address}</td>
                             <td>{item.phone} </td>
                             <td>{item.email}</td>
-                            <td>{item.payment_method}</td>
-                            <td>{item.shipping_method}</td>
+                            <td>{item.payment_method === 1 && 'Paypal'}
+                            {item.payment_method === 2 && 'Visa'}
+                            {item.payment_method === 3 && 'MasterCard'}</td>
+                            <td>{item.shipping_method === 1 && 'DPD'}
+                            {item.shipping_method === 2 && 'Omniva'}
+                            {item.shipping_method === 3 && 'LP Express'}</td>
                             <td>{item.product_qty}</td>
                             <td>{item.product_id}</td>
-                            <td>{item.is_completed}</td>
                             <td>{(new Date(item.created_at)).toLocaleString('lt-LT')}</td>
                             <td>
-                                <Link to={'/admin/orders/edit-order/' + item.id} className="btn btn-primary">Edit</Link>
+                                <button 
+                                onClick={() => handleChange(item.id, item.is_completed)}
+                                
+                                className="btn btn-primary">
+                                    {item.is_completed ? 'Shipped' : 'Pending'}
+                                </button>
                             </td>
                         </tr>
                     )}

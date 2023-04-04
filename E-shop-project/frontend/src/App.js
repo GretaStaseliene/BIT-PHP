@@ -12,6 +12,7 @@ import MainContext from './context/MainContext';
 
 // Puslapiai
 import Products from './pages/Products';
+import Order from './pages/Order';
 import AdminProducts from './pages/admin/Products';
 import NewProduct from './pages/admin/ProductsNew';
 import EditProduct from './pages/admin/ProductsEdit';
@@ -19,8 +20,7 @@ import Categories from './pages/admin/Categories';
 import NewCategory from './pages/admin/CategoriesNew';
 import EditCategory from './pages/admin/CategoriesEdit';
 import Orders from './pages/admin/Orders';
-import EditOrder from './pages/admin/OrdersEdit';
-import NewOrder from './pages/admin/OrdersNew';
+import Category from './pages/Category';
 
 function App() {
   const [data, setData] = useState([]);
@@ -47,6 +47,8 @@ function App() {
           <Main>
             <Routes>
               <Route path='/' element={<Products />} />
+              <Route path='/category/:id' element={<Category />} />
+              <Route path='/:productId/:productQty' element={<Order />} />
               <Route path='/admin'>
                 <Route index  element={<AdminProducts />} />
                 <Route path='new-product' element={<NewProduct />} />
@@ -55,8 +57,6 @@ function App() {
                 <Route path='new-category' element={<NewCategory />} />
                 <Route path='edit-category/:id' element={<EditCategory />} />
                 <Route path='orders' element={<Orders />} />
-                <Route path='orders/new-order' element={<NewOrder />} />
-                <Route path='orders/edit-order/:id' element={<EditOrder />} />
               </Route>
             </Routes>
           </Main>

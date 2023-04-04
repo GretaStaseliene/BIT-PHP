@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Products;
+use App\Models\Categories;
 use Exception;
 
 class ProductsController extends Controller
@@ -19,6 +20,14 @@ class ProductsController extends Controller
             return Products::with('categories')->find($id);
         } catch(Exception $e) {
             return response('Product was not found', 500);
+        }
+    }
+
+    public function categoryProducts($id) {
+        try {
+            return Categories::with('products')->find($id);
+        } catch(\Exception $e) {
+            return response('Couldnt find products', 500);
         }
     }
 
@@ -79,6 +88,14 @@ class ProductsController extends Controller
             return Products::where('name', 'LIKE', '%' . $keyword . '%')->orWhere('sku', 'LIKE', $keyword)->get();
         } catch(Exception $e) {
             return response('Sorry, could not find product.', 500);
+        }
+    }
+
+    public function order($field, $order) {
+        try{
+            return Products::with('categories')->orderBy($field, $order)->get();
+        } catch(\Exception $e) {
+            return response($e, 500);
         }
     }
 }
