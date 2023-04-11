@@ -1,5 +1,5 @@
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useContext, useEffect } from 'react';
 import MainContext from '../../context/MainContext';
@@ -8,9 +8,10 @@ function Header() {
     const [search, setSearch] = useState('');
     const [show, setShow] = useState(false);
     const [categories, setCategories] = useState([]);
+    const navigate = useNavigate();
 
     // Grazinamas objektas
-    const { setData, setRefresh } = useContext(MainContext);
+    const { setData, setRefresh, user, setUser } = useContext(MainContext);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/categories')
@@ -26,6 +27,15 @@ function Header() {
             .then(resp => setData(resp.data));
     }
 
+    const handleLogout = () => {
+        axios.get('http://localhost:8000/api/logout')
+            .then(resp => {
+                localStorage.removeItem('token');
+                setUser(false);
+                navigate('/');
+            });
+    }
+
     return (
         <header className='container'>
             <div className="p-3 mb-3 border-bottom">
@@ -34,21 +44,14 @@ function Header() {
                         <h4>E-Shop</h4>
                     </Link>
 
-                    {/* <div className="nav me-lg-auto mb-2 justify-content-center mb-md-0 w-25 ms-3">
-                        <select className="form-select">
-                            <option>Choose category</option>
-                            {categories.map(el =>
-                                <option key={el.id} value={el.name}>
-                                    <Link to={'/category/' + el.id} className="nav-link px-2 link-secondary">{el.name}</Link>
-                                </option>
-                            )}
-                        </select>
-                    </div> */}
-
                     <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        {categories.map(el =>
-                            <li key={el.id}><Link to={'/category/' + el.id} className="nav-link px-2 link-dar">{el.name}</Link></li>
-                        )}
+                        <li className="nav-link px-2 link-dark ms-4">Categories
+                            <ul>
+                                {categories.map(el =>
+                                    <li key={el.id}><Link to={'/category/' + el.id} className="nav-link px-2 link-dark">{el.name}</Link></li>
+                                )}
+                            </ul>
+                        </li>
                     </ul>
 
                     <form
@@ -66,29 +69,42 @@ function Header() {
                         <button className='btn btn-primary'>Search</button>
                     </form>
 
-                    <div className="dropdown text-end">
-                        <div
-                            className="d-block link-dark dropdown-toggle"
-                            onClick={() => setShow(!show)}
-                        >
-                            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" className="rounded-circle" />
+                    {!user ?
+                        <ul className="nav mb-2 justify-content-center mb-md-0 gap-2">
+                            <li>
+                                <Link to='/login' className="nav-link px-2 link-dark btn btn-outline-secondary">Login</Link>
+                            </li>
+                            <li>
+                                <Link to='/register' className="nav-link px-2 link-dark btn btn-outline-secondary">Register</Link>
+                            </li>
+
+                        </ul>
+                        :
+
+                        <div className="dropdown text-end">
+                            <div
+                                className="d-block link-dark dropdown-toggle"
+                                onClick={() => setShow(!show)}
+                            >
+                                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" className="rounded-circle" />
+                            </div>
+                            {show &&
+                                <ul className="dropdown-menu text-small show">
+                                    <li>
+                                        <Link to="/admin" className="dropdown-item">Admin</Link>
+                                    </li>
+                                    <li>
+                                        <Link to="admin/categories" className="dropdown-item">Categories</Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/admin/orders" className="dropdown-item">Orders</Link>
+                                    </li>
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <li className="dropdown-item logout" onClick={handleLogout}>Sign out</li>
+                                </ul>
+                            }
                         </div>
-                        {show &&
-                            <ul className="dropdown-menu text-small show">
-                                <li>
-                                    <Link to="/admin" className="dropdown-item">Admin</Link>
-                                </li>
-                                <li>
-                                    <Link to="admin/categories" className="dropdown-item">Categories</Link>
-                                </li>
-                                <li>
-                                    <Link to="/admin/orders" className="dropdown-item">Orders</Link>
-                                </li>
-                                {/* <li><hr className="dropdown-divider" /></li>
-                            <li><a className="dropdown-item" href="#">Sign out</a></li> */}
-                            </ul>
-                        }
-                    </div>
+                    }
                 </div>
             </div>
         </header>

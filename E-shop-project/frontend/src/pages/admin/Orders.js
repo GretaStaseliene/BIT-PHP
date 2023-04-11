@@ -21,7 +21,7 @@ function Orders() {
 
         axios.put('http://localhost:8000/api/orders/' + id, { is_completed: !is_completed })
             .then(resp => {
-                setMessage({ m: resp.data, s: 'success '});
+                setMessage({ m: resp.data, s: 'success ' });
                 setRefresh(!refresh);
             });
     }
@@ -57,21 +57,32 @@ function Orders() {
                             <td>{item.phone} </td>
                             <td>{item.email}</td>
                             <td>{item.payment_method === 1 && 'Paypal'}
-                            {item.payment_method === 2 && 'Visa'}
-                            {item.payment_method === 3 && 'MasterCard'}</td>
+                                {item.payment_method === 2 && 'Visa'}
+                                {item.payment_method === 3 && 'MasterCard'}</td>
                             <td>{item.shipping_method === 1 && 'DPD'}
-                            {item.shipping_method === 2 && 'Omniva'}
-                            {item.shipping_method === 3 && 'LP Express'}</td>
+                                {item.shipping_method === 2 && 'Omniva'}
+                                {item.shipping_method === 3 && 'LP Express'}</td>
                             <td>{item.product_qty}</td>
                             <td>{item.product_id}</td>
                             <td>{(new Date(item.created_at)).toLocaleString('lt-LT')}</td>
                             <td>
-                                <button 
+                                <div className="form-check form-switch">
+                                    <label className="form-check-label">
+                                        <input className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            onChange={() => handleChange(item.id, item.is_completed)}
+                                            checked={item.is_completed}
+                                        />
+                                        {!item.is_completed ? 'Being prepared' : 'Shipped'}
+                                    </label>
+                                </div>
+                                {/* <button 
                                 onClick={() => handleChange(item.id, item.is_completed)}
                                 
                                 className="btn btn-primary">
                                     {item.is_completed ? 'Shipped' : 'Pending'}
-                                </button>
+                                </button> */}
                             </td>
                         </tr>
                     )}

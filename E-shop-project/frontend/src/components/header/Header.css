@@ -11,3 +11,34 @@
 .dropdown-toggle {
     cursor: pointer;
 }
+
+header .nav-link:hover {
+    background-color: #adb5bd;
+    cursor: pointer;
+}
+
+header ul ul {
+    display: none;
+    position: absolute;
+    top: 57px;
+    left: 197px;
+    z-index: 999999;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+header ul li:hover > ul {
+	display:inherit;
+}
+
+header ul ul li {
+    float: none;
+    display: list-item;
+    position: relative;
+    list-style-type: none;
+    padding: 3px 30px 3px 0;
+}
+
+.logout {
+    cursor: pointer;
+}
